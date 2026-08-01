@@ -1,0 +1,580 @@
+/* ==========================================================================
+   THEME & BASE VARIABLES
+   ========================================================================== */
+:root {
+  --bg-gradient: radial-gradient(circle at center, #2a0845 0%, #10002b 60%, #050014 100%);
+  --gold-color: #ffd700;
+  --pink-color: #ff69b4;
+  --rose-color: #ff2a6d;
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 105, 180, 0.2);
+  --font-main: 'Poppins', sans-serif;
+  --font-cursive: 'Dancing Script', cursive;
+  --font-romantic: 'Great Vibes', cursive;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  font-family: var(--font-main);
+  background: #050014;
+  color: #ffffff;
+}
+
+/* Background Canvas */
+#bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   UI UTILITIES & GLASSMORPHISM
+   ========================================================================== */
+.hidden {
+  display: none !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  box-shadow: var(--glass-shadow);
+  padding: 30px;
+  text-align: center;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-glow {
+  background: linear-gradient(135deg, #ff69b4, #ff2a6d);
+  color: #ffffff;
+  border: none;
+  padding: 14px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(255, 42, 109, 0.5);
+  transition: all 0.3s ease;
+  outline: none;
+  margin-top: 15px;
+}
+
+.btn-glow:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 0 25px rgba(255, 105, 180, 0.8);
+}
+
+.btn-small {
+  padding: 10px 22px;
+  font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   OVERLAY & START
+   ========================================================================== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-gradient);
+}
+
+.start-card h1 {
+  font-family: var(--font-romantic);
+  font-size: 3rem;
+  color: var(--gold-color);
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.sparkle-icon {
+  font-size: 3rem;
+  animation: pulseSparkle 2s infinite alternate;
+}
+
+@keyframes pulseSparkle {
+  0% { transform: scale(1); filter: drop-shadow(0 0 5px #ffd700); }
+  100% { transform: scale(1.2); filter: drop-shadow(0 0 20px #ff69b4); }
+}
+
+/* ==========================================================================
+   MAIN APP & STAGE
+   ========================================================================== */
+#app-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  height: 320px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.character-wrapper {
+  position: absolute;
+  bottom: 0;
+  width: 220px;
+  height: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.8s ease, opacity 0.8s ease;
+  cursor: pointer;
+}
+
+.character-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.character-shadow {
+  width: 120px;
+  height: 18px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  filter: blur(6px);
+  margin-top: -10px;
+}
+
+/* Paw Print Trail */
+#paw-prints-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.paw-print {
+  position: absolute;
+  font-size: 1.5rem;
+  opacity: 0;
+  animation: fadeInPaw 1.5s forwards ease-in-out;
+}
+
+@keyframes fadeInPaw {
+  0% { opacity: 0; transform: scale(0.5) rotate(-10deg); }
+  50% { opacity: 0.8; transform: scale(1) rotate(0deg); }
+  100% { opacity: 0.3; transform: scale(0.9); }
+}
+
+/* ==========================================================================
+   CHARACTER SVG KEYFRAME ANIMATIONS
+   ========================================================================== */
+/* Breathing */
+#kitten-svg, #noah-svg {
+  animation: breathe 3.5s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Ears Wiggle */
+.ear-anim { transform-origin: 60px 75px; animation: earWiggle 4s ease-in-out infinite; }
+.ear-anim-rev { transform-origin: 140px 75px; animation: earWiggle 4s ease-in-out infinite 0.5s; }
+
+@keyframes earWiggle {
+  0%, 90%, 100% { transform: rotate(0deg); }
+  93% { transform: rotate(-8deg); }
+  96% { transform: rotate(5deg); }
+}
+
+/* Tail Wag */
+.tail-anim { transform-origin: 130px 170px; animation: tailWag 3s ease-in-out infinite; }
+@keyframes tailWag {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(12deg); }
+}
+
+/* Blinking */
+.blink-anim { animation: eyeBlink 4s infinite; }
+@keyframes eyeBlink {
+  0%, 96%, 100% { transform: scaleY(0); }
+  98% { transform: scaleY(1); }
+}
+
+/* Head Tilt */
+.head-tilt-anim { transform-origin: 100px 110px; animation: headTilt 6s ease-in-out infinite; }
+@keyframes headTilt {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-4deg); }
+  75% { transform: rotate(4deg); }
+}
+
+/* Paw Waving */
+.paw-wave-anim { transform-origin: 60px 160px; animation: wavePaw 2.5s ease-in-out infinite; }
+@keyframes wavePaw {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-20deg); }
+}
+
+/* Talking Lip Bounce */
+.talking #kitten-mouth {
+  animation: lipSync 0.25s infinite alternate;
+}
+@keyframes lipSync {
+  0% { transform: scaleY(1); }
+  100% { transform: scaleY(2.8) translateY(-2px); }
+}
+
+.talking #noah-mouth {
+  animation: noahTalk 0.3s infinite alternate;
+}
+@keyframes noahTalk {
+  0% { d: path("M 95 128 Q 110 142 125 128"); }
+  100% { d: path("M 95 128 Q 110 155 125 128"); }
+}
+
+/* Envelope Float */
+.envelope-hover { animation: floatEnv 2.5s ease-in-out infinite; transform-origin: center; }
+@keyframes floatEnv {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Shake Animation for Wrong Password */
+.shake {
+  animation: shakeKeypad 0.5s ease-in-out;
+}
+@keyframes shakeKeypad {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-12px); }
+  40%, 80% { transform: translateX(12px); }
+}
+
+/* ==========================================================================
+   DIALOG BOX
+   ========================================================================== */
+.dialog-card {
+  width: 100%;
+  max-width: 550px;
+  min-height: 120px;
+  margin-bottom: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.speaker-tag {
+  position: absolute;
+  top: -14px;
+  left: 30px;
+  background: linear-gradient(135deg, #ffd700, #ffa751);
+  color: #121318;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 4px 16px;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.typing-text {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: #f8f9fa;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================================================
+   KEYPAD SCREEN
+   ========================================================================== */
+.keypad-card {
+  width: 100%;
+  max-width: 320px;
+  margin: 10px auto;
+}
+
+.keypad-card h3 {
+  font-family: var(--font-cursive);
+  font-size: 1.8rem;
+  color: var(--pink-color);
+  margin-bottom: 15px;
+}
+
+.password-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  font-size: 2rem;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 10px 20px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 20px;
+  letter-spacing: 4px;
+}
+
+.password-display.error {
+  border-color: #ff2a6d;
+  box-shadow: 0 0 20px rgba(255, 42, 109, 0.6);
+  color: #ff2a6d;
+}
+
+.password-display.success {
+  border-color: #ffd700;
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
+  color: #ffd700;
+}
+
+.keypad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.key-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 600;
+  padding: 14px 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(5px);
+}
+
+.key-btn:hover {
+  background: rgba(255, 105, 180, 0.3);
+  border-color: var(--pink-color);
+  box-shadow: 0 0 12px var(--pink-color);
+}
+
+.key-btn:active {
+  transform: scale(0.92);
+}
+
+.key-action {
+  background: rgba(255, 215, 0, 0.15);
+  color: var(--gold-color);
+}
+
+/* ==========================================================================
+   LETTER MODAL
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(10, 0, 25, 0.85);
+  backdrop-filter: blur(12px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.letter-paper {
+  background: #fffdfa;
+  color: #2b2b2b;
+  width: 100%;
+  max-width: 520px;
+  padding: 40px 35px;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.3);
+  position: relative;
+  transform: scale(0.8);
+  opacity: 0;
+  animation: openLetter 0.8s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes openLetter {
+  to { transform: scale(1); opacity: 1; }
+}
+
+.letter-seal-top {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2.2rem;
+  background: #ffb7c5;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.letter-content {
+  font-family: var(--font-cursive);
+  font-size: 1.45rem;
+  line-height: 1.7;
+}
+
+.letter-line {
+  margin-bottom: 15px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.6s ease;
+}
+
+.letter-line.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.letter-signature {
+  text-align: right;
+  margin-top: 25px;
+  font-size: 1.6rem;
+}
+
+.letter-signature span {
+  font-family: var(--font-romantic);
+  font-size: 2.2rem;
+  color: #ff2a6d;
+}
+
+/* ==========================================================================
+   GALLERY & POLAROIDS
+   ========================================================================== */
+.gallery-section, .heart-section, .final-section {
+  width: 100%;
+  max-width: 700px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.gallery-section h2, .heart-section h2 {
+  font-family: var(--font-cursive);
+  font-size: 2.5rem;
+  color: var(--gold-color);
+  margin-bottom: 25px;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+.polaroid-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.polaroid {
+  background: #ffffff;
+  padding: 12px 12px 20px 12px;
+  border-radius: 8px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+  transform: rotate(var(--rot));
+  transition: transform 0.3s ease;
+}
+
+.polaroid:hover {
+  transform: scale(1.1) rotate(0deg);
+  z-index: 10;
+}
+
+.polaroid-img {
+  width: 100%;
+  height: 110px;
+  background: #ffe4ed;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+}
+
+.polaroid p {
+  color: #333;
+  font-family: var(--font-cursive);
+  font-size: 1.1rem;
+  margin-top: 10px;
+}
+
+/* ==========================================================================
+   INTERACTIVE HEART & FINAL SCENE
+   ========================================================================== */
+.big-glowing-heart {
+  font-size: 7rem;
+  cursor: pointer;
+  display: inline-block;
+  margin: 30px 0;
+  animation: heartBeat 1.5s infinite ease-in-out;
+  filter: drop-shadow(0 0 25px #ff2a6d);
+  transition: transform 0.2s;
+}
+
+.big-glowing-heart:hover {
+  transform: scale(1.25);
+}
+
+@keyframes heartBeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+.final-title {
+  font-family: var(--font-romantic);
+  font-size: 4rem;
+  color: var(--gold-color);
+  text-shadow: 0 0 20px var(--pink-color), 0 0 40px var(--gold-color);
+  margin-bottom: 20px;
+}
+
+.kittens-cluster {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  font-size: 2.5rem;
+  margin: 20px 0;
+}
+
+.btn-large {
+  font-size: 1.3rem;
+  padding: 16px 40px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+  .start-card h1 { font-size: 2.2rem; }
+  .typing-text { font-size: 1rem; }
+  .letter-paper { padding: 25px 20px; }
+  .letter-content { font-size: 1.2rem; }
+  .final-title { font-size: 2.8rem; }
+  .stage { height: 260px; }
+  .character-wrapper { width: 170px; height: 190px; }
+    }
