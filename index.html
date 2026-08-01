@@ -1,0 +1,305 @@
+Enter<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notre Monde Magique — Pour Lia</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Poppins:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Particle Background Canvas -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Start Overlay (Required for Audio Context & Voice Setup) -->
+  <div id="start-overlay" class="overlay">
+    <div class="glass-card start-card">
+      <div class="sparkle-icon">✨</div>
+      <h1>Un Voyage Magique Pour Lia</h1>
+      <p>Active le son pour vivre une histoire féerique...</p>
+      <button id="btn-start" class="btn-glow">Commencer l'Aventure ❤️</button>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main id="app-container" class="hidden">
+    
+    <!-- Stage Area for Characters -->
+    <div class="stage">
+      
+      <!-- KITTEN CHARACTER (SVG) -->
+      <div id="kitten-wrapper" class="character-wrapper kitten-pos-center">
+        <svg id="kitten-svg" viewBox="0 0 200 220" class="character-svg">
+          <defs>
+            <radialGradient id="furGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#fff5f8"/>
+              <stop offset="70%" stop-color="#ffe4ed"/>
+              <stop offset="100%" stop-color="#f3c2d4"/>
+            </radialGradient>
+            <radialGradient id="eyeGrad" cx="40%" cy="40%" r="60%">
+              <stop offset="0%" stop-color="#70e0ff"/>
+              <stop offset="50%" stop-color="#00a8ff"/>
+              <stop offset="100%" stop-color="#004e92"/>
+            </radialGradient>
+            <filter id="softGlow">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+
+          <!-- Tail -->
+          <path id="kitten-tail" class="tail-anim" d="M 130 170 Q 180 160 170 110 Q 160 80 180 70" fill="none" stroke="#f3c2d4" stroke-width="18" stroke-linecap="round"/>
+
+          <!-- Body -->
+          <ellipse cx="100" cy="165" rx="45" ry="40" fill="url(#furGrad)" />
+          <!-- Chest fluff -->
+          <path d="M 85 140 Q 100 160 115 140 Q 100 175 85 140" fill="#ffffff" opacity="0.9"/>
+
+          <!-- Paws -->
+          <ellipse cx="75" cy="195" rx="14" ry="10" fill="#ffffff" />
+          <ellipse cx="125" cy="195" rx="14" ry="10" fill="#ffffff" />
+
+          <!-- Left Waving Paw -->
+          <g id="kitten-wave-paw" class="paw-wave-anim">
+            <ellipse cx="60" cy="160" rx="12" ry="16" fill="url(#furGrad)" transform="rotate(25 60 160)"/>
+            <circle cx="56" cy="168" r="4" fill="#ffb6c1"/>
+          </g>
+
+          <!-- Head Group (Breath & Tilt) -->
+          <g id="kitten-head" class="head-tilt-anim">
+            <!-- Ears -->
+            <g id="kitten-ear-left" class="ear-anim">
+              <path d="M 55 75 Q 30 20 65 35 Z" fill="url(#furGrad)"/>
+              <path d="M 58 70 Q 40 30 62 42 Z" fill="#ffb6c1"/>
+            </g>
+            <g id="kitten-ear-right" class="ear-anim-rev">
+              <path d="M 145 75 Q 170 20 135 35 Z" fill="url(#furGrad)"/>
+              <path d="M 142 70 Q 160 30 138 42 Z" fill="#ffb6c1"/>
+            </g>
+
+            <!-- Head Base -->
+            <ellipse cx="100" cy="80" rx="55" ry="45" fill="url(#furGrad)" filter="url(#softGlow)"/>
+            <!-- Fluffy Cheeks -->
+            <path d="M 40 85 Q 30 90 42 100 Q 55 95 50 85 Z" fill="#ffffff"/>
+            <path d="M 160 85 Q 170 90 158 100 Q 145 95 150 85 Z" fill="#ffffff"/>
+
+            <!-- Blush -->
+            <ellipse cx="60" cy="92" rx="10" ry="6" fill="#ff80ab" opacity="0.4"/>
+            <ellipse cx="140" cy="92" rx="10" ry="6" fill="#ff80ab" opacity="0.4"/>
+
+            <!-- Eyes Group -->
+            <g id="kitten-eyes">
+              <!-- Left Eye -->
+              <ellipse cx="72" cy="75" rx="13" ry="16" fill="#1a1a2e"/>
+              <ellipse cx="72" cy="75" rx="11" ry="14" fill="url(#eyeGrad)"/>
+              <circle cx="68" cy="69" r="5" fill="#ffffff"/>
+              <circle cx="76" cy="80" r="2" fill="#ffffff"/>
+
+              <!-- Right Eye -->
+              <ellipse cx="128" cy="75" rx="13" ry="16" fill="#1a1a2e"/>
+              <ellipse cx="128" cy="75" rx="11" ry="14" fill="url(#eyeGrad)"/>
+              <circle cx="124" cy="69" r="5" fill="#ffffff"/>
+              <circle cx="132" cy="80" r="2" fill="#ffffff"/>
+
+              <!-- Eyelids for blinking -->
+              <path id="kitten-lid-left" d="M 58 58 Q 72 58 86 58 Q 72 58 58 58 Z" fill="#f3c2d4" class="blink-anim"/>
+              <path id="kitten-lid-right" d="M 114 58 Q 128 58 142 58 Q 128 58 114 58 Z" fill="#f3c2d4" class="blink-anim"/>
+            </g>
+
+            <!-- Sad Eyes Overlay (Hidden by default) -->
+            <g id="kitten-sad-eyes" class="hidden">
+              <path d="M 60 65 Q 72 75 84 68" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <path d="M 116 68 Q 128 75 140 65" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/>
+            </g>
+
+            <!-- Nose -->
+            <polygon points="96,90 104,90 100,95" fill="#ff6b8b"/>
+
+            <!-- Mouth / Lip Sync -->
+            <path id="kitten-mouth" d="M 92 100 Q 100 106 108 100" fill="none" stroke="#ff6b8b" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- Happy Smile (Dynamic) -->
+            <path id="kitten-smile" d="M 90 98 Q 100 112 110 98" fill="#ff4081" stroke="#ff6b8b" stroke-width="1.5" class="hidden"/>
+          </g>
+        </svg>
+        <div class="character-shadow"></div>
+      </div>
+
+      <!-- NOAH CHARACTER (SVG) -->
+      <div id="noah-wrapper" class="character-wrapper hidden">
+        <svg id="noah-svg" viewBox="0 0 220 280" class="character-svg">
+          <defs>
+            <linearGradient id="hoodieGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#2c2d35"/>
+              <stop offset="100%" stop-color="#121318"/>
+            </linearGradient>
+            <linearGradient id="skinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#ffdfd3"/>
+              <stop offset="100%" stop-color="#f3c5b4"/>
+            </linearGradient>
+            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ffe259"/>
+              <stop offset="100%" stop-color="#ffa751"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Noah Body & Hoodie -->
+          <path d="M 40 280 C 40 200, 60 170, 110 170 C 160 170, 180 200, 180 280 Z" fill="url(#hoodieGrad)" />
+          <!-- Hoodie Cap/Collar -->
+          <path d="M 60 170 C 80 195, 140 195, 160 170 C 175 200, 45 200, 60 170 Z" fill="#1a1b20"/>
+          <path d="M 95 185 L 93 220" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
+          <path d="M 125 185 L 127 220" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
+
+          <!-- Head & Neck -->
+          <rect x="98" y="145" width="24" height="30" rx="10" fill="url(#skinGrad)"/>
+          <ellipse cx="110" cy="115" rx="42" ry="48" fill="url(#skinGrad)"/>
+
+          <!-- Pixar Hair -->
+          <path d="M 65 110 C 60 70, 90 50, 110 50 C 140 50, 160 70, 158 105 C 150 78, 130 65, 110 68 C 90 65, 72 80, 65 110 Z" fill="#3d2314"/>
+          <path d="M 85 62 C 105 45, 135 52, 148 68 C 130 55, 105 55, 85 62 Z" fill="#5a3622"/>
+
+          <!-- Eyes & Eyebrows -->
+          <path d="M 80 92 Q 92 88 100 93" stroke="#3d2314" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M 120 93 Q 128 88 140 92" stroke="#3d2314" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+          <ellipse cx="90" cy="105" rx="7" ry="9" fill="#2c1a0e"/>
+          <ellipse cx="130" cy="105" rx="7" ry="9" fill="#2c1a0e"/>
+          <circle cx="88" cy="102" r="2.5" fill="#ffffff"/>
+          <circle cx="128" cy="102" r="2.5" fill="#ffffff"/>
+
+          <!-- Nose -->
+          <path d="M 108 106 Q 110 116 114 116" stroke="#db9c85" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+          <!-- Warm Smile -->
+          <path id="noah-mouth" d="M 95 128 Q 110 142 125 128" stroke="#c05c5c" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+          <!-- Hands Holding Pink Envelope -->
+          <g id="noah-envelope-group" class="envelope-hover">
+            <!-- Arms -->
+            <path d="M 50 240 C 65 210, 85 210, 95 230" stroke="#2c2d35" stroke-width="22" stroke-linecap="round" fill="none"/>
+            <path d="M 170 240 C 155 210, 135 210, 125 230" stroke="#2c2d35" stroke-width="22" stroke-linecap="round" fill="none"/>
+
+            <!-- Pink Envelope Body -->
+            <rect x="70" y="200" width="80" height="52" rx="6" fill="#ffb7c5" stroke="#ff8da1" stroke-width="2"/>
+            <path d="M 70 200 L 110 230 L 150 200" fill="#f89cb1" stroke="#ff8da1" stroke-width="1.5"/>
+
+            <!-- Golden Heart Wax Seal -->
+            <circle cx="110" cy="226" r="10" fill="url(#goldGrad)" filter="url(#softGlow)"/>
+            <path d="M 110 229 C 110 229, 104 224, 104 222 C 104 220, 106 219, 108 219 C 109 219, 110 220, 110 220 C 110 220, 111 219, 112 219 C 114 219, 116 220, 116 222 C 116 224, 110 229, 110 229 Z" fill="#b37d00"/>
+
+            <!-- Hands Over Envelope -->
+            <ellipse cx="72" cy="226" rx="8" ry="6" fill="url(#skinGrad)"/>
+            <ellipse cx="148" cy="226" rx="8" ry="6" fill="url(#skinGrad)"/>
+          </g>
+        </svg>
+        <div class="character-shadow"></div>
+      </div>
+
+    </div>
+
+    <!-- Paw Prints Trail Area -->
+    <div id="paw-prints-container"></div>
+
+    <!-- Dynamic Dialog Box -->
+    <div id="dialog-box" class="glass-card dialog-card">
+      <div id="speaker-name" class="speaker-tag">La Petite Chatte</div>
+      <p id="dialog-text" class="typing-text"></p>
+      <button id="btn-next" class="btn-glow btn-small hidden">Continuer ✨</button>
+    </div>
+
+    <!-- SCENE 3: LUXURY KEYPAD SCREEN -->
+    <div id="keypad-container" class="glass-card keypad-card hidden">
+      <h3>Code Secret d'Amour</h3>
+      <div id="password-display" class="password-display">
+        <span class="digit-placeholder">•</span>
+        <span class="digit-placeholder">•</span>
+        <span class="slash">/</span>
+        <span class="digit-placeholder">•</span>
+        <span class="digit-placeholder">•</span>
+      </div>
+      <div class="keypad-grid">
+        <button class="key-btn" data-key="1">1</button>
+        <button class="key-btn" data-key="2">2</button>
+        <button class="key-btn" data-key="3">3</button>
+        <button class="key-btn" data-key="4">4</button>
+        <button class="key-btn" data-key="5">5</button>
+        <button class="key-btn" data-key="6">6</button>
+        <button class="key-btn" data-key="7">7</button>
+        <button class="key-btn" data-key="8">8</button>
+        <button class="key-btn" data-key="9">9</button>
+        <button class="key-btn key-action" data-key="C">C</button>
+        <button class="key-btn" data-key="0">0</button>
+        <button class="key-btn key-action" data-key="OK">OK</button>
+      </div>
+    </div>
+
+    <!-- SCENE 6: HANDWRITTEN ROMANTIC LETTER MODAL -->
+    <div id="letter-modal" class="modal-overlay hidden">
+      <div class="letter-paper">
+        <div class="letter-seal-top">❤️</div>
+        <div class="letter-content">
+          <p class="letter-line">Ma chère Lia,</p>
+          <p class="letter-line">Depuis que tu es entrée dans ma vie, chaque journée est devenue plus belle.</p>
+          <p class="letter-line">Ton sourire illumine mes pensées, ta voix apaise mon cœur, et ta présence rend chaque instant précieux.</p>
+          <p class="letter-line">Merci d'être celle que tu es.</p>
+          <p class="letter-line">Je promets de toujours prendre soin de toi, de te soutenir, de te faire sourire, et de t'aimer un peu plus chaque jour.</p>
+          <p class="letter-line">Je t'aime aujourd'hui, demain, et pour toujours.</p>
+          <p class="letter-signature">Avec tout mon amour,<br><span>Noah ❤️</span></p>
+        </div>
+        <button id="btn-close-letter" class="btn-glow btn-small hidden">Découvrir nos souvenirs ✨</button>
+      </div>
+    </div>
+
+    <!-- SCENE 7: CUTE GALLERY SECTION -->
+    <div id="gallery-container" class="gallery-section hidden">
+      <h2>Nos Doux Souvenirs</h2>
+      <div class="polaroid-grid">
+        <div class="polaroid" style="--rot: -4deg">
+          <div class="polaroid-img img-cat">🐾</div>
+          <p>Notre Petit Monde</p>
+        </div>
+        <div class="polaroid" style="--rot: 3deg">
+          <div class="polaroid-img img-rose">🌹</div>
+          <p>Douces Roses</p>
+        </div>
+        <div class="polaroid" style="--rot: -2deg">
+          <div class="polaroid-img img-coffee">☕</div>
+          <p>Rendez-vous Café</p>
+        </div>
+        <div class="polaroid" style="--rot: 5deg">
+          <div class="polaroid-img img-stars">🌙</div>
+          <p>Sous les Étoiles</p>
+        </div>
+      </div>
+      <button id="btn-to-heart" class="btn-glow">Toucher le Cœur ❤️</button>
+    </div>
+
+    <!-- SCENE 8: INTERACTIVE GLOWING HEART -->
+    <div id="heart-container" class="heart-section hidden">
+      <h2>Touche mon Cœur, Lia</h2>
+      <div id="interactive-heart" class="big-glowing-heart">
+        ❤️
+      </div>
+      <button id="btn-to-final" class="btn-glow hidden">Continuer vers la Fin ✨</button>
+    </div>
+
+    <!-- SCENE 9: FINAL SCENE -->
+    <div id="final-container" class="final-section hidden">
+      <h1 class="final-title">Je t'aimerai toujours, Lia</h1>
+      <div id="final-kittens-cluster" class="kittens-cluster"></div>
+      <button id="btn-restart" class="btn-glow btn-large">Revivre notre histoire 🔄</button>
+    </div>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+              </html>
